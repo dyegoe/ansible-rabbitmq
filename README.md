@@ -12,8 +12,8 @@ If you want just standalone, specify only masters at inventory or if you want a 
 * role: check_os 
   * check if OS is compatible
 * role: firewall
-  * open some tcp ports used by RabbitMQ ('amqp': '5672', 'mgmt': '15672', 'amqp_cli': '25672', 'empd': '4369')
-  * open tcp ports wich will be used by HAproxy
+  * open some tcp ports used by RabbitMQ ('amqp': '5673', 'mgmt': '15672', 'amqp_cli': '25672', 'empd': '4369')
+  * open tcp ports wich will be used by HAproxy ('amqp': '5672')
 * role: hosts
   * configure /etc/hosts based onde IP and hostnames fetched by Ansible Setup
 * role: common
@@ -28,10 +28,10 @@ If you want just standalone, specify only masters at inventory or if you want a 
   * fetch .erlang\_cookie from master
   * copy it to slaves
   * restart RabbitMQ service
-  * stop_app and reset all nodes
-  * start_app at master
+  * stop\_app and reset all nodes
+  * start\_app at master
   * connect slaves to master
-  * start_app at slaves.
+  * start\_app at slaves.
   * set policy to default vhost to sync messages through the cluster
 * role: haproxy (as the same condition above)
   * install haproxy
