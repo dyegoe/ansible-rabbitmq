@@ -3,6 +3,7 @@
 master
 slaves
 
+## Vars which you need to change ##
 [hosts:vars]
 ## Here you can set a password if you don't have key pairs;
 ## change the username wich will be used and
