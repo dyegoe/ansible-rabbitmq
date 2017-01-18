@@ -9,7 +9,7 @@ If you want just standalone, specify only masters at inventory or if you want a 
 * If you will use a different storage device to RabbitMQ, verify if the server has a parition mounted as /var/lib/rabbitmq
 
 ## Coverage
-* role: check_os 
+* role: check\_os 
   * check if OS is compatible
 * role: firewall
   * open some tcp ports used by RabbitMQ ('amqp': '5673', 'mgmt': '15672', 'amqp_cli': '25672', 'empd': '4369')
