@@ -1,0 +1,31 @@
+[
+  {kernel, [
+    {inet_dist_listen_min, {{ rmq['ports']['amqp_cli'] }}},
+    {inet_dist_listen_max, {{ rmq['ports']['amqp_cli'] }}}
+  ]},
+  {rabbit, [
+    {tcp_listeners, [{{ rmq['ports']['amqp'] }}]},
+    {tcp_listen_options, [
+                          {backlog, 128},
+                          {nodelay, true},
+                          {linger, {true,0}},
+                          {exit_on_close, false},
+                          {sndbuf, 196608},
+                          {recbuf, 196608}
+                         ]},
+    {ssl_listeners, []},
+    {loopback_users, []},
+    {default_vhost, <<"{{ rmq['vhost'] }}">>},
+    {default_user, <<"{{ rmq['user'] }}">>},
+    {default_pass, <<"{{ rmq['pass'] }}">>},
+    {default_permissions, [<<"{{ rmq['perm']['config'] }}">>, <<"{{ rmq['perm']['write'] }}">>, <<"{{ rmq['perm']['read'] }}">>]},
+    {default_user_tags, [{{ rmq['user_tags'] }}]},
+    {heartbeat, {{ rmq['heartbeat'] }}},
+    {vm_memory_high_watermark, {{ rmq['vm_memory_high_watermark'] }}}
+  ]},
+  {rabbitmq_management, [
+    {listener, [
+                {port, {{ rmq['ports']['mgmt'] }}},
+                {ssl, false}]}
+  ]}
+].

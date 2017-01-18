@@ -1,0 +1,13 @@
+---
+- hosts: hosts
+  roles:
+    - check_os
+    - firewall
+    - hosts
+    - common
+    - { role: cluster, when: "groups['slaves']|length > 0" }
+    - { role: haproxy, when: "groups['slaves']|length > 0" }
+#  environment:
+#    http_proxy: http://proxy.dominio.com:3128
+#    https_proxy: http://proxy.dominio.com:3128
+#    ftp_proxy: http://proxy.dominio.com:3128

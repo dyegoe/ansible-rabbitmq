@@ -1,0 +1,54 @@
+- name: fetch {{ rmq['erlang_cookie'] }} file
+  fetch:
+    src: "{{ rmq['erlang_cookie'] }}"
+    dest: "{{ playbook_dir }}/tmp/tmp.erlang_cookie"
+    flat: yes
+  when: "'master' in group_names"
+
+- name: stopping rabbitmq service
+  systemd:
+    name: "{{ rmq['service']['name'] }}"
+    state: stopped
+    enabled: yes
+
+- name: copy {{ rmq['erlang_cookie'] }} file
+  copy:
+    src: "{{ playbook_dir }}/tmp/tmp.erlang_cookie"
+    dest: "{{ rmq['erlang_cookie'] }}"
+  when: "'slaves' in group_names"
+
+- name: starting rabbitmq service
+  systemd:
+    name: "{{ rmq['service']['name'] }}"
+    state: started
+    enabled: yes
+
+- name: stop and reset app
+  command: "rabbitmqctl {{ item }}"
+  with_items:
+    - "stop_app"
+    - "reset"
+
+- name: start app
+  command: "rabbitmqctl {{ item }}"
+  when: "'master' in group_names"
+  with_items:
+    - "start_app"
+
+- name: (slaves) joining in the cluster
+  command: "rabbitmqctl join_cluster rabbit@{{ hostvars[item]['ansible_hostname'] }}"
+  when: "'slaves' in group_names"
+  with_items:
+    - "{{ groups['master'] }}"
+
+- name: start app
+  command: "rabbitmqctl {{ item }}"
+  when: "'slaves' in group_names"
+  with_items:
+    - "start_app"
+
+- name: (master) set policy
+  command: "rabbitmqctl {{ item }}"
+  when: "'master' in group_names"
+  with_items:
+    - "set_policy ha-all \"\" '{\"ha-mode\":\"all\",\"ha-sync-mode\":\"automatic\"}'"
