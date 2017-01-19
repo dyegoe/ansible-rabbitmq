@@ -1,5 +1,5 @@
 ---
-- { include: includes/hosts.yml, when: "groups['master']|length > 0" }
-- { include: includes/rabbitmq.yml, when: "groups['rabbitmq']|length > 0" }
-- { include: includes/cluster.yml, when: "groups['slaves']|length > 0" }
-- { include: includes/haproxy.yml, when: "groups['haproxy']|length > 0" }
+- { include: hosts.yml, when: "groups['master']|length > 0" }
+- { include: rabbitmq.yml, when: "groups['rabbitmq']|length > 0" }
+- { include: cluster.yml, when: "groups['slaves']|length > 0" }
+- { include: haproxy.yml, when: "groups['haproxy']|length > 0" }
