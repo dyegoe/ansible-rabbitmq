@@ -1,6 +1,6 @@
 # Ansible RabbitMQ
-This ansible-playbook is used to deploy a standalone or a cluster of RabbitMQ service, and you can also use to deploy how many servers you want.
-If you want just standalone, specify only masters at inventory or if you want a cluster you need to specify either master (only 1) and slaves (how many you want).
+This ansible-playbook is used to deploy a standalone or a cluster of RabbitMQ service, and you can also use to deploy how many servers as you want.
+If you want just standalone, specify only masters at inventory or if you want a cluster you need to specify either master (only 1) and slaves (how many as you want).
 
 ## Requirements
 * CentOS7 minimal install
@@ -11,12 +11,13 @@ If you want just standalone, specify only masters at inventory or if you want a 
 ## Coverage
 * role: check\_os 
   * check if OS is compatible
-* role: firewall
-  * open some tcp ports used by RabbitMQ ('amqp': '5673', 'mgmt': '15672', 'amqp_cli': '25672', 'empd': '4369')
-  * open tcp ports wich will be used by HAproxy ('amqp': '5672')
 * role: hosts
   * configure /etc/hosts based onde IP and hostnames fetched by Ansible Setup
-* role: common
+* role: firewall_rmq
+  * open some tcp ports used by RabbitMQ ('amqp': '5673', 'mgmt': '15672', 'amqp_cli': '25672', 'empd': '4369')
+* role: firewall_hap
+  * open tcp ports wich will be used by HAproxy ('amqp': '5672')
+* role: rabbitmq
   * change file descriptors limits
   * install RabbitMQ package
   * install libselinux-python (ansible requirement)
@@ -33,13 +34,16 @@ If you want just standalone, specify only masters at inventory or if you want a 
   * connect slaves to master
   * start\_app at slaves.
   * set policy to default vhost to sync messages through the cluster
-* role: haproxy (as the same condition above)
+* role: haproxy (played only if you configure one or more haproxy at inventory)
   * install haproxy
   * copy conf
   * start service
 ## Configuration
-* Some vars can be changed at inventory/production
-* at site.yml you can uncomment environment vars to use proxy. This is an example, you need change it;
+* Some vars can be changed at inventory/hosts
+* Tips:
+  * Standalone version: Specify 1 or more hosts at master group.
+  * Cluster version: Specify 1 host at master group and 1 or more hosts at slaves group.
+  * Cluster version with HAproxy: Specify 1 host at master group, 1 or more hosts at slaves group and 1 or more hosts at haproxy group (this can be same as slaves).
 
 ## Consider
 **Advice:** This project was created just to maintain my ansible-playbooks. You can use, distribute, change or whatever you want, and don't need to mention myself. But use at your own risk. I can't guarantee that will be functional in your environment.
