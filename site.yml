@@ -1,13 +1,5 @@
 ---
-- hosts: hosts
-  roles:
-    - check_os
-    - firewall
-    - hosts
-    - common
-    - { role: cluster, when: "groups['slaves']|length > 0" }
-    - { role: haproxy, when: "groups['slaves']|length > 0" }
-#  environment:
-#    http_proxy: http://proxy.dominio.com:3128
-#    https_proxy: http://proxy.dominio.com:3128
-#    ftp_proxy: http://proxy.dominio.com:3128
+- { include: includes/hosts.yml, when: "groups['master']|length > 0" }
+- { include: includes/rabbitmq.yml, when: "groups['rabbitmq']|length > 0" }
+- { include: includes/cluster.yml, when: "groups['slaves']|length > 0" }
+- { include: includes/haproxy.yml, when: "groups['haproxy']|length > 0" }

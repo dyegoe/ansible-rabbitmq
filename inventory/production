@@ -1,7 +1,11 @@
-## DON'T CHANGE HERE
+## DON'T CHANGE BELOW ##
 [hosts:children]
+rabbitmq
+haproxy
+[rabbitmq:children]
 master
 slaves
+## DON'T CHANGE ABOVE ##
 
 ## Vars which you need to change ##
 [hosts:vars]
@@ -20,7 +24,6 @@ limits_file="/etc/security/limits.conf"
 
 ## RabbitMQ Package that will be installed
 rabbitmq_package="rabbitmq-server.noarch"
-
 ## Python Dict to set some RabbitMQ configs,
 ## other settings can be changed at roles/common/templates/rabbitmq-config.j2
 rmq={ 'ports': { 'amqp': '5673', 'mgmt': '15672', 'amqp_cli': '25672', 'empd': '4369' }, 'vhost': '/', 'user': 'admin', 'pass': 'CHANGEME', 'perm': { 'config':'.*', 'write':'.*', 'read':'.*' }, 'user_tags': 'administrator', 'heartbeat': '15', 'vm_memory_high_watermark': '0.4', 'conf_dir': '/etc/rabbitmq', 'conf_file': 'rabbitmq.config', 'limits': { 'soft': '50000', 'hard': '70000' }, 'service': { 'name': 'rabbitmq-server', 'file': '/usr/lib/systemd/system/rabbitmq-server.service' }, 'erlang_cookie': '/var/lib/rabbitmq/.erlang.cookie' }
@@ -32,10 +35,19 @@ haproxy_package="haproxy"
 hap={ 'conf_file': '/etc/haproxy/haproxy.cfg', 'ports': { 'amqp': '5672' }, 'balance': 'roundrobin', 'server_param': 'check inter 5s rise 2 fall 3', 'service': 'haproxy.service' }
 
 [master]
-## Here you can set just one host to be master
+## Here you can set just one host to be master if you use to clustering.
+## If you want to install many standalone instances, you can specify more than one
+## and comment slaves lines bellow.
 rabbit1.domain.local
 
 [slaves]
-## Here you can set how many slaves that you want
+## Here you can set how many slaves that you want if you want to clustering.
+## If you want just standalone instances, comment all lines below.
 rabbit2.domain.local
 rabbit3.domain.local
+
+[haproxy]
+## Here you can set hosts where HAproxy will be installed. (Only if you want to clustering).
+## This hosts can be either same as above or different.
+hap1.domain.local
+hap2.domain.local

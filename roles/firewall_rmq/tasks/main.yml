@@ -1,0 +1,12 @@
+- name: open rabbitmq ports on firewalld
+  firewalld:
+    port: "{{ item['value'] }}/tcp"
+    permanent: true
+    state: enabled
+  ignore_errors: yes
+  with_dict: "{{ rmq['ports'] }}"
+
+- name: restart firewalld
+  systemd:
+    name: firewalld.service
+    state: restarted
