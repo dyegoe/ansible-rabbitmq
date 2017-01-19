@@ -32,7 +32,7 @@ rmq={ 'user': 'admin', 'pass': 'CHANGEME', 'ports': { 'amqp': '5673', 'mgmt': '1
 haproxy_package="haproxy"
 ## Python Dict to set some HAproxy configs
 ## other settings can be changed at roles/haproxy/templates/haproxy.cfg.j2
-hap={ 'user': 'admin', 'pass': 'CHANGEME', 'conf_file': '/etc/haproxy/haproxy.cfg', 'ports': { 'amqp': '5672' }, 'balance': 'roundrobin', 'server_param': 'check inter 5s rise 2 fall 3', 'service': 'haproxy.service' }
+hap={ 'user': 'admin', 'pass': 'CHANGEME', 'conf_file': '/etc/haproxy/haproxy.cfg', 'ports': { 'amqp': '5672', 'stats': '9000' }, 'balance': 'roundrobin', 'server_param': 'check inter 5s rise 2 fall 3', 'service': 'haproxy.service' }
 
 [master]
 ## Here you can set just one host to be master if you use to clustering.
