@@ -25,7 +25,7 @@ listen stats {{ ansible_default_ipv4['address'] }}:{{ hap['ports']['stats'] }}
     timeout server 30000
     stats uri /{{ hap['stats_uri'] }} 
     stats realm HAProxy\ Statistics
-    stats auth {{ hap['user'] }}:{{ hap['password'] }}
+    stats auth {{ hap['user'] }}:{{ hap['pass'] }}
     stats admin if TRUE
 
 listen rabbitmq 
