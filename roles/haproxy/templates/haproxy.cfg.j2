@@ -18,20 +18,27 @@ defaults
     maxconn                 10000
 
 listen stats {{ ansible_default_ipv4['address'] }}:{{ hap['ports']['stats'] }}
-    mode http
-    balance
-    timeout client 5000
-    timeout connect 4000
-    timeout server 30000
-    stats uri /{{ hap['stats_uri'] }} 
-    stats realm HAProxy\ Statistics
-    stats auth {{ hap['user'] }}:{{ hap['pass'] }}
-    stats admin if TRUE
+    mode                    http
+    timeout client          5000
+    timeout connect         4000
+    timeout server          30000
+    stats                   enable
+    stats uri               {{ hap['stats_uri'] }} 
+    stats realm             HAProxy\ Statistics
+    stats auth              {{ hap['user'] }}:{{ hap['pass'] }}
+    stats admin if          TRUE
 
-listen rabbitmq 
+frontend rabbitmq
     bind                    {{ ansible_default_ipv4['address'] }}:{{ hap['ports']['amqp'] }}
     mode                    tcp
+    default_backend         rabbitmq-nodes
+
+backend rabbitmq-nodes
+    mode                    tcp
     balance                 {{ hap['balance'] }}
-    {% for item_tmp in groups['rabbitmq'] %}
+    stats                   enable
+    option                  forwardfor
+    option                  tcpka
+{% for item_tmp in groups['rabbitmq'] %}
     server                  {{ hostvars[item_tmp]['ansible_hostname'] }} {{ hostvars[item_tmp]['ansible_default_ipv4']['address'] }}:{{ rmq['ports']['amqp'] }} {{ hap['server_param'] }}
-    {% endfor %}
+{% endfor %}
