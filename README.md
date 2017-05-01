@@ -43,7 +43,7 @@ If you want just standalone, specify only masters at inventory or if you want a 
 * Tips:
   * Standalone version: Specify 1 or more hosts at master group.
   * Cluster version: Specify 1 host at master group and 1 or more hosts at slaves group.
-  * Cluster version with HAproxy: Specify 1 host at master group, 1 or more hosts at slaves group and 1 or more hosts at haproxy group (this can be same as slaves).
+  * Cluster version with HAproxy: Specify 1 host at master group, 1 or more hosts at slaves group and 1 or more hosts at haproxy group (this could be same as slaves).
 
 ## Consider
 **Advice:** This project was created just to maintain my ansible-playbooks. You would be able to use, distribute, change or whatever you want, and don't need to mention myself. But use at your own risk. I can't guarantee that will be functional in your environment.
