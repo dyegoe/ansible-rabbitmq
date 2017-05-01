@@ -1,4 +1,4 @@
-- name: open haproxy ports on firewalld
+- name: "open haproxy ports on firewalld"
   firewalld:
     port: "{{ item['value'] }}/tcp"
     permanent: true
@@ -6,7 +6,7 @@
   ignore_errors: yes
   with_dict: "{{ hap['ports'] }}"
 
-- name: restart firewalld
+- name: "restart firewalld"
   systemd:
     name: firewalld.service
     state: restarted

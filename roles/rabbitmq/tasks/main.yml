@@ -1,4 +1,4 @@
-- name: remove any previous changes of file descriptors limits
+- name: "remove any previous changes of file descriptors limits"
   lineinfile:
     dest: "{{ limits_file }}"
     backrefs: yes
@@ -9,7 +9,7 @@
     - "rabbitmq soft nofile"
     - "rabbitmq hard nofile"
 
-- name: increase file descriptors limits for user rabbitmq
+- name: "increase file descriptors limits for user rabbitmq"
   lineinfile:
     dest: "{{ limits_file }}"
     state: present
@@ -19,22 +19,22 @@
     - "rabbitmq soft nofile {{ rmq['limits']['soft'] }}"
     - "rabbitmq hard nofile {{ rmq['limits']['hard'] }}"
 
-- name: install rabbit-mq package
+- name: "install rabbit-mq package"
   yum:
     name: "{{ rabbitmq_package }}"
     state: latest
 
-- name: check libselinux-python is installed
+- name: "check libselinux-python is installed"
   yum:
     name: "libselinux-python"
     state: present
 
-- name: copy conf
+- name: "copy conf"
   template:
     src: "rabbitmq-config.j2"
     dest: "{{ rmq['conf_dir'] }}/{{ rmq['conf_file'] }}"
 
-- name: add to {{ rmq.service.file }} file descriptors limits
+- name: "add to {{ rmq.service.file }} file descriptors limits"
   ini_file:
     dest: "{{ rmq['service']['file'] }}"
     section: Service
@@ -42,14 +42,14 @@
     value: "{{ rmq['limits']['soft'] }}"
     no_extra_spaces: yes
 
-- name: (re)start rabbitmq systemd
+- name: "(re)start rabbitmq systemd"
   systemd:
     name: "{{ rmq['service']['name'] }}"
     state: restarted
     enabled: yes
     daemon_reload: yes
 
-- name: enable rabbitmq_management plugin 
+- name: "enable rabbitmq_management plugin "
   rabbitmq_plugin:
     names: rabbitmq_management
     state: enabled
